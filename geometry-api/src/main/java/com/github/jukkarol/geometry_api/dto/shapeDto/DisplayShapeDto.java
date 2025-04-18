@@ -1,6 +1,6 @@
 package com.github.jukkarol.geometry_api.dto.shapeDto;
 
-import com.github.jukkarol.geometry_api.model.ShapeParameter;
+import com.github.jukkarol.geometry_api.dto.shapeParameterDto.DisplayShapeParameterDto;
 import com.github.jukkarol.geometry_api.model.enums.ShapeType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,5 +16,5 @@ import java.util.List;
 public class DisplayShapeDto {
     private ShapeType type;
 
-    private List<ShapeParameter> parameters;
+    private List<DisplayShapeParameterDto> parameters;
 }

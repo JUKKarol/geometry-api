@@ -32,7 +32,7 @@ public class ShapeService {
     }
 
     public List<DisplayShapeDto> GetShapesByType(ShapeType shapeType) {
-        List<Shape> shapes = shapeRepository.findAllByShapeType(shapeType);
+        List<Shape> shapes = shapeRepository.findAllByType(shapeType);
 
         return shapeMapper.shapesToDisplayShapeDtos(shapes);
     }

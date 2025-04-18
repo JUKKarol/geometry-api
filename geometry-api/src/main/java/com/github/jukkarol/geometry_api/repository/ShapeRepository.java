@@ -10,5 +10,5 @@ import java.util.Optional;
 
 @Repository
 public interface ShapeRepository extends JpaRepository<Shape, Long> {
-    List<Shape> findAllByShapeType(ShapeType shapeType);
+    List<Shape> findAllByType(ShapeType shapeType);
 }
