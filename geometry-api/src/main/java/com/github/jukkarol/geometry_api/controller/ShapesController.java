@@ -4,6 +4,7 @@ import com.github.jukkarol.geometry_api.dto.shapeDto.DisplayShapeDto;
 import com.github.jukkarol.geometry_api.dto.shapeDto.request.CreateShapeRequest;
 import com.github.jukkarol.geometry_api.dto.shapeDto.request.GetAllShapesRequest;
 import com.github.jukkarol.geometry_api.service.ShapeService;
+import com.github.jukkarol.geometry_api.strategy.shapeStrategy.ShapeStrategyManager;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +19,16 @@ import java.util.List;
 @Validated
 public class ShapesController {
     public final ShapeService shapeService;
+    private final ShapeStrategyManager strategyManager;
 
-    @PostMapping()
-    public ResponseEntity<DisplayShapeDto> register(@RequestBody @Valid CreateShapeRequest createShapeRequest) {
-        DisplayShapeDto createdShape = shapeService.CreateShape(createShapeRequest);
-
-        return ResponseEntity.ok(createdShape);
+    @PostMapping
+    public ResponseEntity<String> addShape(@RequestBody CreateShapeRequest dto) {
+        strategyManager.saveShape(dto);
+        return ResponseEntity.ok("Shape saved: " + dto.getType());
     }
 
     @GetMapping()
-    public ResponseEntity<List<DisplayShapeDto>> register(@RequestBody @Valid GetAllShapesRequest getAllShapesRequest) {
+    public ResponseEntity<List<DisplayShapeDto>> getShapesByType(@RequestBody @Valid GetAllShapesRequest getAllShapesRequest) {
         List<DisplayShapeDto> shapes = shapeService.GetShapesByType(getAllShapesRequest.getType());
 
         return ResponseEntity.ok(shapes);
