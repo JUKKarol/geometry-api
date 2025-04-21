@@ -1,6 +1,7 @@
 package com.github.jukkarol.geometry_api.strategy.shapeStrategy;
 
 import com.github.jukkarol.geometry_api.dto.shapeDto.request.CreateShapeRequest;
+import com.github.jukkarol.geometry_api.mapper.ShapeParameterMapper;
 import com.github.jukkarol.geometry_api.model.Shape;
 import com.github.jukkarol.geometry_api.model.ShapeParameter;
 import com.github.jukkarol.geometry_api.model.enums.ShapeType;
@@ -9,11 +10,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Qualifier("circleStrategy")
 @AllArgsConstructor
 public class RectangleStrategy implements ShapeStrategy {
     private final ShapeRepository shapeRepository;
+    public final ShapeParameterMapper shapeParameterMapper;
 
     @Override
     public boolean supports(ShapeType type) {
@@ -22,12 +26,14 @@ public class RectangleStrategy implements ShapeStrategy {
 
     @Override
     public void processAndSave(CreateShapeRequest dto) {
-        ShapeParameter a = dto.getParameters().stream()
+        List<ShapeParameter> parameters = shapeParameterMapper.displayShapeParameterDtosToShapeParameters(dto.getParameters());
+
+        ShapeParameter a = parameters.stream()
                 .filter(p -> "a".equals(p.getName()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Missing parameter: a"));
 
-        ShapeParameter b = dto.getParameters().stream()
+        ShapeParameter b =parameters.stream()
                 .filter(p -> "b".equals(p.getName()))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Missing parameter: b"));

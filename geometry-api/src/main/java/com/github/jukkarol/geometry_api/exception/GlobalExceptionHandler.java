@@ -95,7 +95,7 @@ public class GlobalExceptionHandler {
 
                 String fieldName = "unknown";
                 if (ife.getPath() != null && !ife.getPath().isEmpty()) {
-                    fieldName = ife.getPath().get(ife.getPath().size() - 1).getFieldName();
+                    fieldName = ife.getPath().getLast().getFieldName();
                 }
 
                 message = String.format(
@@ -116,7 +116,6 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({
-            IllegalArgumentException.class,
             org.springframework.core.convert.ConversionFailedException.class,
             org.springframework.beans.TypeMismatchException.class
     })
@@ -126,6 +125,14 @@ public class GlobalExceptionHandler {
                 HttpStatus.BAD_REQUEST, ex.getMessage());
 
         log.warn("Bad request: {}", ex.getMessage());
+        return problemDetail;
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ProblemDetail handleIllegalArgumentException(IllegalArgumentException ex) {
+        ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
+        problemDetail.setTitle("Bad Request");
+        problemDetail.setDetail(ex.getMessage());
         return problemDetail;
     }
 

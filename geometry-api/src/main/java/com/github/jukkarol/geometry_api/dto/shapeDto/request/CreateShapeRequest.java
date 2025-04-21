@@ -1,6 +1,6 @@
 package com.github.jukkarol.geometry_api.dto.shapeDto.request;
 
-import com.github.jukkarol.geometry_api.model.ShapeParameter;
+import com.github.jukkarol.geometry_api.dto.shapeParameterDto.DisplayShapeParameterDto;
 import com.github.jukkarol.geometry_api.model.enums.ShapeType;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -21,5 +21,5 @@ public class CreateShapeRequest {
     private ShapeType type;
 
     @NotEmpty(message = "Shape parameters cannot be empty")
-    private List<ShapeParameter> parameters;
+    private List<DisplayShapeParameterDto> parameters;
 }
