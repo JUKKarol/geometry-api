@@ -3,6 +3,7 @@ package com.github.jukkarol.geometry_api.integration.shapeIntegrationTests;
 import com.github.jukkarol.geometry_api.model.Shape;
 import com.github.jukkarol.geometry_api.model.ShapeParameter;
 import com.github.jukkarol.geometry_api.model.enums.ShapeType;
+import com.github.jukkarol.geometry_api.model.shapeModel.CircleShape;
 import com.github.jukkarol.geometry_api.repository.ShapeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,7 @@ public class GETIntegrationTest {
 
     @Test
     void shouldReturnShapesOfGivenType() throws Exception {
-        Shape shape = new Shape();
+        CircleShape shape = new CircleShape();
         shape.setType(ShapeType.CIRCLE);
 
         ShapeParameter param = new ShapeParameter();
@@ -58,12 +59,9 @@ public class GETIntegrationTest {
     }
 
     @Test
-    void shouldReturnEmptyList_WhenNoShapesOfType() throws Exception {
-        var result = mockMvc.perform(get("/api/v1/shapes/circle"))
-                .andExpect(status().isOk())
+    void shouldReturnNotFound_WhenNoShapesOfType() throws Exception {
+        mockMvc.perform(get("/api/v1/shapes/circle"))
+                .andExpect(status().isNotFound())
                 .andReturn();
-
-        var jsonResponse = result.getResponse().getContentAsString();
-        assertThat(jsonResponse).isEqualTo("[]");
     }
 }

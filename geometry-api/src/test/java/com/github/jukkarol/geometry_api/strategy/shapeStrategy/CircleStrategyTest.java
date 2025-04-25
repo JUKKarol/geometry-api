@@ -71,7 +71,7 @@ class CircleStrategyTest {
                 circleStrategy.processAndSave(validRequest)
         );
 
-        assertEquals("Missing parameter: r", exception.getMessage());
+        assertEquals("Circle must have a valid parameters: r", exception.getMessage());
         verify(shapeRepository, never()).save(any());
     }
 }

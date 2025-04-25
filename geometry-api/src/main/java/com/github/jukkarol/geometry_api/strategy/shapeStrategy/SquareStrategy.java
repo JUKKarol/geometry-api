@@ -5,6 +5,7 @@ import com.github.jukkarol.geometry_api.mapper.ShapeParameterMapper;
 import com.github.jukkarol.geometry_api.model.Shape;
 import com.github.jukkarol.geometry_api.model.ShapeParameter;
 import com.github.jukkarol.geometry_api.model.enums.ShapeType;
+import com.github.jukkarol.geometry_api.model.shapeModel.SquareShape;
 import com.github.jukkarol.geometry_api.repository.ShapeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class SquareStrategy implements ShapeStrategy {
     private final ShapeRepository shapeRepository;
-    public final ShapeParameterMapper shapeParameterMapper;
+    private final ShapeParameterMapper shapeParameterMapper;
 
     @Override
     public boolean supports(ShapeType type) {
@@ -28,16 +29,13 @@ public class SquareStrategy implements ShapeStrategy {
     public void processAndSave(CreateShapeRequest dto) {
         List<ShapeParameter> parameters = shapeParameterMapper.displayShapeParameterDtosToShapeParameters(dto.getParameters());
 
-        ShapeParameter a = parameters.stream()
-                .filter(p -> "a".equals(p.getName()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Missing parameter: a"));
-
-        Shape shape = new Shape();
+        SquareShape shape = new SquareShape();
+        shape.setParameters(parameters);
         shape.setType(ShapeType.SQUARE);
 
-        a.setShape(shape);
-        shape.getParameters().add(a);
+        if (!shape.isValid()) {
+            throw new IllegalArgumentException("Square must have a valid parameters: a");
+        }
 
         shapeRepository.save(shape);
     }

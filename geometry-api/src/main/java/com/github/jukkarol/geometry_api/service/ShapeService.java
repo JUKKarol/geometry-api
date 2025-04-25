@@ -22,10 +22,6 @@ public class ShapeService {
     public List<DisplayShapeDto> GetShapesByType(ShapeType shapeType) {
         List<Shape> shapes = shapeRepository.findAllByType(shapeType);
 
-        if(shapes.isEmpty()) {
-            throw new NoSuchElementException("No shapes found for type: " + shapeType);
-        }
-
         return shapeMapper.shapesToDisplayShapeDtos(shapes);
     }
 }

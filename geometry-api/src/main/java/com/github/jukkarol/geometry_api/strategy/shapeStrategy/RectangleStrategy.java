@@ -5,6 +5,7 @@ import com.github.jukkarol.geometry_api.mapper.ShapeParameterMapper;
 import com.github.jukkarol.geometry_api.model.Shape;
 import com.github.jukkarol.geometry_api.model.ShapeParameter;
 import com.github.jukkarol.geometry_api.model.enums.ShapeType;
+import com.github.jukkarol.geometry_api.model.shapeModel.RectangleShape;
 import com.github.jukkarol.geometry_api.repository.ShapeRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,24 +29,15 @@ public class RectangleStrategy implements ShapeStrategy {
     public void processAndSave(CreateShapeRequest dto) {
         List<ShapeParameter> parameters = shapeParameterMapper.displayShapeParameterDtosToShapeParameters(dto.getParameters());
 
-        ShapeParameter a = parameters.stream()
-                .filter(p -> "a".equals(p.getName()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Missing parameter: a"));
+        RectangleShape shape = new RectangleShape();
 
-        ShapeParameter b =parameters.stream()
-                .filter(p -> "b".equals(p.getName()))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Missing parameter: b"));
-
-        Shape shape = new Shape();
+        parameters.forEach(p -> p.setShape(shape));
+        shape.setParameters(parameters);
         shape.setType(ShapeType.RECTANGLE);
 
-        a.setShape(shape);
-        shape.getParameters().add(a);
-
-        b.setShape(shape);
-        shape.getParameters().add(b);
+        if (!shape.isValid()) {
+            throw new IllegalArgumentException("Rectangle must have a valid parameters: a and b");
+        }
 
         shapeRepository.save(shape);
     }

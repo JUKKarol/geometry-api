@@ -17,13 +17,17 @@ import java.util.ArrayList;
 
 @Entity
 @Table(name = "shapes")
-public class Shape {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "shape_type", discriminatorType = DiscriminatorType.STRING)
+public abstract class Shape {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
     private ShapeType type;
 
     @OneToMany(mappedBy = "shape", cascade = CascadeType.ALL, orphanRemoval = true)

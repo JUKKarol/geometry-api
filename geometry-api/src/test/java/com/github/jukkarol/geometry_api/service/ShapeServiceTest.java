@@ -4,6 +4,7 @@ import com.github.jukkarol.geometry_api.dto.shapeDto.DisplayShapeDto;
 import com.github.jukkarol.geometry_api.mapper.ShapeMapper;
 import com.github.jukkarol.geometry_api.model.Shape;
 import com.github.jukkarol.geometry_api.model.enums.ShapeType;
+import com.github.jukkarol.geometry_api.model.shapeModel.CircleShape;
 import com.github.jukkarol.geometry_api.repository.ShapeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,7 +31,7 @@ class ShapeServiceTest {
 
     @Test
     void shouldReturnListOfDisplayShapeDto_WhenShapesExist() {
-        Shape shape = new Shape();
+        CircleShape shape = new CircleShape();
         shape.setType(ShapeType.CIRCLE);
 
         DisplayShapeDto dto = new DisplayShapeDto();
