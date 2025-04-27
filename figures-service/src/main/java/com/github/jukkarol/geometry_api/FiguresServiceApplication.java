@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class GeometryApiApplication {
+public class FiguresServiceApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(GeometryApiApplication.class, args);
+		SpringApplication.run(FiguresServiceApplication.class, args);
 	}
 
 }

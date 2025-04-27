@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.github.jukkarol</groupId>
-	<artifactId>geometry-api</artifactId>
+	<artifactId>figures-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>geometry-api</name>
+	<name>figures-service</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
