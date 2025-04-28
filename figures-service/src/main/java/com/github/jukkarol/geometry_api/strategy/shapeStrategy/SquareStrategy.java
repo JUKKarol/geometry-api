@@ -1,5 +1,6 @@
 package com.github.jukkarol.geometry_api.strategy.shapeStrategy;
 
+import com.github.jukkarol.geometry_api.client.NotificationClient;
 import com.github.jukkarol.geometry_api.dto.shapeDto.request.CreateShapeRequest;
 import com.github.jukkarol.geometry_api.mapper.ShapeParameterMapper;
 import com.github.jukkarol.geometry_api.model.Shape;
@@ -19,6 +20,7 @@ import java.util.List;
 public class SquareStrategy implements ShapeStrategy {
     private final ShapeRepository shapeRepository;
     private final ShapeParameterMapper shapeParameterMapper;
+    private final NotificationClient notificationClient;
 
     @Override
     public boolean supports(ShapeType type) {
@@ -38,5 +40,7 @@ public class SquareStrategy implements ShapeStrategy {
         }
 
         shapeRepository.save(shape);
+
+        notificationClient.sendNotification(shape.getId());
     }
 }
