@@ -1,5 +1,6 @@
 package com.github.jukkarol.geometry_api.strategy.shapeStrategy;
 
+import com.github.jukkarol.geometry_api.client.NotificationClient;
 import com.github.jukkarol.geometry_api.dto.shapeDto.request.CreateShapeRequest;
 import com.github.jukkarol.geometry_api.dto.shapeParameterDto.DisplayShapeParameterDto;
 import com.github.jukkarol.geometry_api.mapper.ShapeParameterMapper;
@@ -26,6 +27,9 @@ class CircleStrategyTest {
 
     @Mock
     private ShapeParameterMapper shapeParameterMapper;
+
+    @Mock
+    private NotificationClient notificationClient;
 
     @InjectMocks
     private CircleStrategy circleStrategy;
