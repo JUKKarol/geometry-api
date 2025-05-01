@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: P@ssw0rd
+      POSTGRES_USER: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres && psql -U postgres -lqt | cut -d \\| -f 1 | grep -qw figures-service && psql -U postgres -lqt | cut -d \\| -f 1 | grep -qw notification-service"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  figures-service:
+    build:
+      context: .
+      dockerfile: figures-service/Dockerfile
+    container_name: figures-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/figures-service
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: P@ssw0rd
+      SPRING_API_GATEWAY_PORT: 8080
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: notification-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/notification-service
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: P@ssw0rd
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: api-gateway
+    environment:
+      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://localhost:8081
+      SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://localhost:8082
+    ports:
+      - "8080:8080"
+    depends_on:
+      - figures-service
+      - notification-service
+    restart: on-failure
+
+volumes:
+  postgres-data:
