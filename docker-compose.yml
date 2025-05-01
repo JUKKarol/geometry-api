@@ -27,7 +27,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/figures-service
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: P@ssw0rd
-      SPRING_API_GATEWAY_PORT: 8080
+      API_GATEWAY_HOST: api-gateway
+      API_GATEWAY_PORT: 8080
     ports:
       - "8081:8081"
     depends_on:
@@ -57,8 +58,15 @@ services:
       dockerfile: api-gateway/Dockerfile
     container_name: api-gateway
     environment:
-      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://localhost:8081
-      SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://localhost:8082
+      SPRING_CLOUD_GATEWAY_ROUTES_0_ID: figures-service
+      SPRING_CLOUD_GATEWAY_ROUTES_0_URI: http://figures-service:8081
+      SPRING_CLOUD_GATEWAY_ROUTES_0_PREDICATES_0: Path=/figures/**
+      SPRING_CLOUD_GATEWAY_ROUTES_0_FILTERS_0: StripPrefix=1
+
+      SPRING_CLOUD_GATEWAY_ROUTES_1_ID: notification-service
+      SPRING_CLOUD_GATEWAY_ROUTES_1_URI: http://notification-service:8082
+      SPRING_CLOUD_GATEWAY_ROUTES_1_PREDICATES_0: Path=/notifications/**
+      SPRING_CLOUD_GATEWAY_ROUTES_1_FILTERS_0: StripPrefix=1
     ports:
       - "8080:8080"
     depends_on:
